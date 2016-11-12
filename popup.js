@@ -44,7 +44,9 @@ $( document ).ready(function() {
             cache: false,
             success: function(data){
                 console.log(data)
-                var sentiment = Math.round(Math.abs(parseFloat(data.docSentiment.score)) * 10) / 10.0;
+                // var sentiment = Math.round(Math.abs(parseFloat(data.docSentiment.score)) * 10) / 10.0;
+                var sentiment = Math.abs(parseFloat(data.docSentiment.score)) * 20.0;
+                sentiment = sentiment.toFixed(2);
                 $("#sentiment").append(String(sentiment))
             }
         });
