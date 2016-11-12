@@ -1,38 +1,50 @@
 <!doctype html>
-<!--
- This page is shown when the extension button is clicked, because the
- "browser_action" field in manifest.json contains the "default_popup" key with
- value "popup.html".
- -->
 <html>
-  <head>
+<head>
     <title>Getting Started Extension's Popup</title>
-    <style>
-      body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+    <style type="text/css">
+    html {
+        width: 400px;
+        height: 300px;
+        padding: 10px;
+    }
+    body {
+        font-family: 'Open Sans', Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
         font-size: 100%;
-      }
-      #status {
-        /* avoid an excessively wide status text */
-        white-space: pre;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-width: 400px;
-        width: 300px;
-      }
-    </style>
+    }
+    h1 {
+        font-size: 24px;
+    }
 
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-     -->
+    p {
+        font-size: 12px;
+    }
+
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Open+Sans|Raleway">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
     <script src="jquery-3.1.1.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="popup.js"></script>
-  </head>
-  <body>
-    <div id="status">status here</div>
-    <img id="image-result" hidden>
-  </body>
+</head>
+<body>
+    <div>
+        <h1 id ="sentiment">Bias: </h1>
+        <div class="progress">
+            <div id="article-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
+            aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                70% Complete
+            </div>
+        </div>
+    </div>
+    <div>
+        <h1 id="author">Author: </h1>
+        <p>Author data</p>
+    </div>
+</body>
 </html>
