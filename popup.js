@@ -29,6 +29,8 @@ $( document ).ready(function() {
         // });
         $.getJSON("author.json", function(json) {
             console.log(json);
+            var author = json.authors.names[0];
+            $("#author").append(author);
         });
     }
 
@@ -50,6 +52,9 @@ $( document ).ready(function() {
         // });
         $.getJSON("sentiment.json", function(json) {
             console.log(json);
+            var sentiment = Math.abs(parseFloat(json.docSentiment.score)) * 20.0;
+            sentiment = sentiment.toFixed(2);
+            $("#sentiment").append(String(sentiment) + " / 10")
         });
     }
 
