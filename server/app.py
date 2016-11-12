@@ -61,7 +61,12 @@ def update_author(author):
     return get_author(author)
 
 def update_objectivity_of(author, data):
-    pass
+    average_sentiment = 0
+    for sentiment in data: average_sentiment += abs(float(sentiment['docSentiment']['score']))
+    average_sentiment /= len(data)
+    objectivity = average_sentiment * 20
+    author.objectivity = objectivity
+    return objectivity
 
 def update_personality_of(author, data):
     full_text = ""
