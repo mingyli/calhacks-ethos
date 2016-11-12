@@ -5,6 +5,5 @@
 | ------------- | ------------- |
 | Jonathan Fung  | jonfung  |
 | Julia Luo  | julialuo  |
-| Li Ming Yuan | mingyli |
+| Ming Li | mingyli |
 | Matthew Soh | msohcw |
-
