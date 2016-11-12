@@ -1,6 +1,7 @@
 import os
 import json
 from flask import Flask
+from Author import Author
 from watson_developer_cloud import AlchemyDataNewsV1
 
 app = Flask(__name__)
@@ -41,12 +42,6 @@ sample_author = Author("John Doe", {}, {})
 
 def get_author(author):
     return sample_author
-
-class Author:
-    def __init__(self, name, personality, taxonomies):
-        self.name = name
-        self.personality = personality
-        self.taxonomies = taxonomies
 
 if __name__ == "__main__":
     app.run()
