@@ -28,14 +28,27 @@ def rate(author, taxonomy):
     return result
 
 def update_author(author):
-    update_author_personality(author)
-    update_author_taxonomy(author)
+    start_range = 'now-10d'
+    results = alchemy_data_news.get_news_documents(
+            start=start_range,
+            end="now",
+            max_results=1,
+            query_fields={
+                'enriched.url.author': author.name
+                }, 
+            return_fields=['enriched.url.taxonomy', 'enriched.url.text', 'enriched.url.url'])
+    update_personality_of(author, results)
+    update_personality_of(author, results)
+    update_taxonomy_of(author, results)
     return get_author(author)
 
-def update_author_personality(author):
+def update_objectivity_of(author, data):
     pass
 
-def update_author_taxonomy(author):
+def update_personality_of(author, data):
+    pass
+
+def update_taxonomy_of(author, data):
     pass
 
 sample_author = Author("John Doe", {}, {})
@@ -45,9 +58,11 @@ def get_author(author):
 
 def build_sample_author():
     sample_name = "Michael D. Shear"
-    taxonomies = update_author_taxonomy(sample_name)
-    personality = update_author_personality(sample_name)
-    sample_author = Author(sample_name, taxonomies, personality)
+    sample_author = Author(sample_name)
+    update_author_objectivity(sample_author)
+    update_author_taxonomy(sample_author)
+    update_author_personality(sample_author)
     return sample_author
+
 if __name__ == "__main__":
     app.run()
