@@ -1,11 +1,17 @@
+html {
+    width: 800px;
+    height: 600px;
+}
+
 body {
     font-family: "fira-sans-2", Verdana, sans-serif;
     font-size: 100%;
+
 }
 
 #container {
     display: block;
-    width: 600px;
+    /*width: 600px;*/
 }
 
 h1 {
