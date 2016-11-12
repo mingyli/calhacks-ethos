@@ -5,6 +5,7 @@ $( document ).ready(function() {
         console.log(apikey);
     });
 
+
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
         console.log(tabs[0].url);
         make_author_request(tabs[0].url);
@@ -54,7 +55,10 @@ $( document ).ready(function() {
             console.log(json);
             var sentiment = Math.abs(parseFloat(json.docSentiment.score)) * 20.0;
             sentiment = sentiment.toFixed(2);
-            $("#sentiment").append(String(sentiment) + " / 10")
+            //$("#sentiment").append(String(sentiment) + " / 10")
+            var sentiment_str = String(sentiment*10)
+            $( "#article-bar" ).css("width",sentiment_str + "%");
+            $( "#article-bar" ).text(sentiment_str);
         });
     }
 

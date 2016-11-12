@@ -18,14 +18,28 @@
     p {
         font-size: 12px;
     }
+
     </style>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Open+Sans|Raleway">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
     <script src="jquery-3.1.1.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="popup.js"></script>
 </head>
 <body>
     <div>
-        <h1 id ="sentiment">Objectivity: </h1>
+        <h1 id ="sentiment">Bias: </h1>
+        <div class="progress">
+            <div id="article-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
+            aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                70% Complete
+            </div>
+        </div>
     </div>
     <div>
         <h1 id="author">Author: </h1>
