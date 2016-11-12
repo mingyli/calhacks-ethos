@@ -29,21 +29,23 @@ def rate(author, taxonomy):
         familiarity = 0
     result = {
             "name": author.name,
+            "objectivity": author.objectivity,
             "familiarity": familiarity,
-            "personality": author.personality
+            "personality": author.personality,
+            "taxonomies": author.taxonomies
             }
     return result
 
 def update_author(author):
-    start_range = 'now-10d'
+    start_range = 'now-7d'
     articles = alchemy_data_news.get_news_documents(
             start=start_range,
             end="now",
-            max_results=1,
+            max_results=5,
             query_fields={
                 'enriched.url.author': author.name
                 }, 
-            return_fields=['enriched.url.taxonomy', 'enriched.url.text', 'enriched.url.url'])
+            return_fields=['enriched.url.taxonomy', 'enriched.url.url'])
     emotion_data = []
     text_data = []
     combined_operations = ['doc-emotion', 'doc-sentiment']
@@ -76,7 +78,18 @@ def update_personality_of(author, data):
     return personality
 
 def update_taxonomy_of(author, articles):
-    pass
+    taxonomies = {}
+    for article in articles['result']['docs']:
+        article_taxonomies = ['source']['enriched']['url']['taxonomy']
+        for taxonomy in article_taxonomies:
+            if float(taxonomy['score']) < 0.5: continue
+            label = taxonomy['label'].split('/')[1]
+            if label in taxonomies:
+                taxonomies['label'] += 1
+            else:
+                taxonomies['label'] = 1
+    author.taxonomies = taxonomies
+    return taxonomies
 
 sample_author = Author("John Doe", {}, {})
 
