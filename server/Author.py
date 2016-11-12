@@ -1,5 +1,3 @@
 class Author():
-    def __init__(self, name, taxonomies, personality):
+    def __init__(self, name):
         self.name = name
-        self.taxonomies = taxonomies
-        self.personality = personality
