@@ -7,7 +7,7 @@ from watson_developer_cloud import AlchemyLanguageV1
 from watson_developer_cloud import PersonalityInsightsV3
 from watson_developer_cloud import WatsonException
 
-PORT = os.environ['PORT']
+PORT = os.environ['PORT'] or 5000
 API_KEY = os.environ['IBM_WATSON_API_KEY']
 API_USERNAME = os.environ['IBM_SERVICE_USERNAME']
 API_PASSWORD = os.environ['IBM_SERVICE_PASSWORD']
