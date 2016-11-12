@@ -4,8 +4,8 @@ $( document ).ready(function() {
         apikey = data.apikey;
         console.log(apikey);
     });
-    
-      
+
+
 
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
         console.log(tabs[0].url);
