@@ -24,8 +24,8 @@ $( document ).ready(function() {
             cache: false,
             success: function(data){
                 console.log(data)
-                var authors = data.authors.names
-                // $("#status").append("---" + authors + "___");
+                var author = data.authors.names[0]
+                $("#author").append(author);
             }
         });
     }
@@ -44,7 +44,6 @@ $( document ).ready(function() {
                 console.log(data)
                 var sentiment = Math.round(Math.abs(parseFloat(data.docSentiment.score)) * 10) / 10;
                 $("#sentiment").text(String(sentiment))
-                // $("#status").append("---" + authors + "___");
             }
         });
     }
