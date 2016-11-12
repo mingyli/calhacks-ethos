@@ -13,7 +13,24 @@ def main(author, taxonomy):
 alchemy_data_news = AlchemyDataNewsV1(api_key=API_KEY)
 
 def rate(author, taxonomy):
+    
     return results 
+
+def update_author(author):
+    update_author_personality(author)
+    update_author_taxonomy(author)
+    return get_author(author)
+
+def update_author_personality(author):
+    pass
+
+def update_author_taxonomy(author):
+    pass
+
+sample_author = {}
+
+def get_author(author):
+    return sample_author
 
 if __name__ == "__main__":
     app.run()
