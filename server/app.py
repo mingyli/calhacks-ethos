@@ -13,8 +13,18 @@ def main(author, taxonomy):
 alchemy_data_news = AlchemyDataNewsV1(api_key=API_KEY)
 
 def rate(author, taxonomy):
-    
-    return results 
+    update_author(author)
+    author = get_author(author)
+    if taxonomy in author.taxonomies:
+        familiarity = author.taxonomies[taxonomy] / sum(author.taxonomies.values())
+    else:
+        familiarity = 0
+    result = {
+            "name": author.name,
+            "familiarity": familiarity,
+            "personality": author.personality
+            }
+    return result
 
 def update_author(author):
     update_author_personality(author)
@@ -27,10 +37,16 @@ def update_author_personality(author):
 def update_author_taxonomy(author):
     pass
 
-sample_author = {}
+sample_author = Author("John Doe", {}, {})
 
 def get_author(author):
     return sample_author
+
+class Author:
+    def __init__(self, name, personality, taxonomies):
+        self.name = name
+        self.personality = personality
+        self.taxonomies = taxonomies
 
 if __name__ == "__main__":
     app.run()
