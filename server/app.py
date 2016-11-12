@@ -43,5 +43,11 @@ sample_author = Author("John Doe", {}, {})
 def get_author(author):
     return sample_author
 
+def build_sample_author():
+    sample_name = "Michael D. Shear"
+    taxonomies = update_author_taxonomy(sample_name)
+    personality = update_author_personality(sample_name)
+    sample_author = Author(sample_name, taxonomies, personality)
+    return sample_author
 if __name__ == "__main__":
     app.run()
