@@ -6,12 +6,19 @@ from watson_developer_cloud import AlchemyDataNewsV1
 
 app = Flask(__name__)
 API_KEY = os.environ['IBM_WATSON_API_KEY']
+API_USERNAME = os.environ['IBM_SERVICE_USERNAME']
+API_PASSWORD = os.environ['IBM_SERVICE_PASSWORD']
 
 @app.route("/author/<author>/taxonomy/<taxonomy>")
 def main(author, taxonomy):
     return json.dumps(rate(author, taxonomy))
 
+alchemy_language = AlchemyLanguageV1(api_key=API_KEY)
 alchemy_data_news = AlchemyDataNewsV1(api_key=API_KEY)
+personality_insights = PersonalityInsightsV3(
+                        version = '2016-10-20',
+                        username = API_USERNAME,
+                        password = API_PASSWORD)
 
 def rate(author, taxonomy):
     update_author(author)
@@ -29,7 +36,7 @@ def rate(author, taxonomy):
 
 def update_author(author):
     start_range = 'now-10d'
-    results = alchemy_data_news.get_news_documents(
+    articles = alchemy_data_news.get_news_documents(
             start=start_range,
             end="now",
             max_results=1,
@@ -37,18 +44,26 @@ def update_author(author):
                 'enriched.url.author': author.name
                 }, 
             return_fields=['enriched.url.taxonomy', 'enriched.url.text', 'enriched.url.url'])
-    update_personality_of(author, results)
-    update_personality_of(author, results)
-    update_taxonomy_of(author, results)
+    data = []
+    combined_operations = ['text', 'doc-emotion', 'doc-sentiment']
+    for article in articles['result']['docs']:
+        article_url =  article['source']['enriched']['url']['url']
+        parsed = alchemy_language.combined(url = article_url, extract = combined_operations)
+        data.append(parsed)
+
+    update_objectivity_of(author, data)
+    update_personality_of(author, data)
+    update_taxonomy_of(author, articles)
     return get_author(author)
 
 def update_objectivity_of(author, data):
     pass
 
 def update_personality_of(author, data):
+     
     pass
 
-def update_taxonomy_of(author, data):
+def update_taxonomy_of(author, articles):
     pass
 
 sample_author = Author("John Doe", {}, {})
