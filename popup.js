@@ -55,11 +55,24 @@ $( document ).ready(function() {
             console.log(json);
             var sentiment = Math.abs(parseFloat(json.docSentiment.score)) * 20.0;
             sentiment = sentiment.toFixed(2);
-            //$("#sentiment").append(String(sentiment) + " / 10")
-            var sentiment_str = String(sentiment*10)
-            $( "#article-bar" ).css("width",sentiment_str + "%");
+            
+            if (sentiment > 10) {
+                sentiment = 10
+            }
+            if (sentiment > 7) {
+                $("#article-bar").addClass("progress-bar-danger");
+            }
+            else if (sentiment > 3) {
+                $("#article-bar").addClass("progress-bar-warning");
+            }
+            else {
+                $("#article-bar").addClass("progress-bar-success");
+            }
+            
+            var sentiment_str = String(sentiment*10);
+            
+            $( "#article-bar" ).css("width",sentiment_str+"%");
             $( "#article-bar" ).text(sentiment_str);
         });
     }
-
 });
