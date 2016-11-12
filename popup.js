@@ -29,7 +29,7 @@ $( document ).ready(function() {
         //         $("#author").append(author);
         //     }
         // });
-        $.getJSON("author.json", function(json) {
+        $.getJSON("testjsons/author.json", function(json) {
             console.log(json);
             var author = json.authors.names[0];
             $("#author").append(author);
@@ -52,7 +52,7 @@ $( document ).ready(function() {
         //         $("#sentiment").append(String(sentiment))
         //     }
         // });
-        $.getJSON("sentiment.json", function(json) {
+        $.getJSON("testjsons/sentiment.json", function(json) {
             console.log(json);
             var article_bias = Math.abs(parseFloat(json.docSentiment.score)) * 200.0;
             article_bias = article_bias.toFixed(2);
@@ -65,7 +65,7 @@ $( document ).ready(function() {
 
     function make_profile_request() {
         // TODO get ajax from matthew server
-        $.getJSON("profile.json", function(json) {
+        $.getJSON("testjsons/profile.json", function(json) {
             console.log(json);
             var author_bias = Math.abs(parseFloat(json.bias)) * 200.0;
             author_bias = author_bias.toFixed(2);
