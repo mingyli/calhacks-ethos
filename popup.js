@@ -42,8 +42,8 @@ $( document ).ready(function() {
             cache: false,
             success: function(data){
                 console.log(data)
-                var sentiment = abs(parseFloat(data.docSentiment.score)) * 10
-                $("#sentiment").text(sentiment)
+                var sentiment = Math.round(Math.abs(parseFloat(data.docSentiment.score)) * 10) / 10;
+                $("#sentiment").text(String(sentiment))
                 // $("#status").append("---" + authors + "___");
             }
         });
