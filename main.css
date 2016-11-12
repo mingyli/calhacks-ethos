@@ -3,6 +3,11 @@ body {
     font-size: 100%;
 }
 
+#container {
+    display: block;
+    width: 600px;
+}
+
 h1 {
     font-size: 24px;
 }
