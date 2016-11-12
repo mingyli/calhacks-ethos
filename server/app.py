@@ -44,24 +44,31 @@ def update_author(author):
                 'enriched.url.author': author.name
                 }, 
             return_fields=['enriched.url.taxonomy', 'enriched.url.text', 'enriched.url.url'])
-    data = []
-    combined_operations = ['text', 'doc-emotion', 'doc-sentiment']
+    emotion_data = []
+    text_data = []
+    combined_operations = ['doc-emotion', 'doc-sentiment']
     for article in articles['result']['docs']:
         article_url =  article['source']['enriched']['url']['url']
-        parsed = alchemy_language.combined(url = article_url, extract = combined_operations)
-        data.append(parsed)
+        emotion = alchemy_language.combined(url = article_url, extract = combined_operations)
+        text = alchemy_language.text(url = article_url)
+        emotion_data.append(emotion)
+        text_data.append(text)
 
-    update_objectivity_of(author, data)
-    update_personality_of(author, data)
+    update_objectivity_of(author, emotion_data)
+    update_personality_of(author, text_data)
     update_taxonomy_of(author, articles)
+
     return get_author(author)
 
 def update_objectivity_of(author, data):
     pass
 
 def update_personality_of(author, data):
-     
-    pass
+    full_text = ""
+    for text in data: full_text += text['text'] + " "
+    personality = personality_insights.profile(full_text.encode('utf-8')) 
+    author.personality = personality
+    return personality
 
 def update_taxonomy_of(author, articles):
     pass
