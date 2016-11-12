@@ -11,7 +11,7 @@ app = Flask(__name__)
 API_KEY = os.environ['IBM_WATSON_API_KEY']
 API_USERNAME = os.environ['IBM_SERVICE_USERNAME']
 API_PASSWORD = os.environ['IBM_SERVICE_PASSWORD']
-DEVELOPMENT = (os.environ['ENVIRONMENT'] == 'development')
+DEVELOPMENT = (os.environ['FLASK_ENVIRONMENT'] == 'development')
 
 @app.route("/author/<author>/taxonomy/<taxonomy>")
 def main(author, taxonomy):
@@ -54,7 +54,7 @@ def rate(author, taxonomy):
     return result
 
 def update_author(author):
-    start_range = 'now-7d'
+    start_range = 'now-3d'
     try:
         articles = alchemy_data_news.get_news_documents(
                 start=start_range,
