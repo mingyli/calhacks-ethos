@@ -7,11 +7,13 @@ from watson_developer_cloud import AlchemyLanguageV1
 from watson_developer_cloud import PersonalityInsightsV3
 from watson_developer_cloud import WatsonException
 
-app = Flask(__name__)
+PORT = os.environ['PORT']
 API_KEY = os.environ['IBM_WATSON_API_KEY']
 API_USERNAME = os.environ['IBM_SERVICE_USERNAME']
 API_PASSWORD = os.environ['IBM_SERVICE_PASSWORD']
 DEVELOPMENT = (os.environ['FLASK_ENVIRONMENT'] == 'development')
+
+app = Flask(__name__)
 
 @app.route("/author/<author>/taxonomy/<taxonomy>")
 def main(author, taxonomy):
@@ -132,4 +134,4 @@ def build_sample_author():
 
 if __name__ == "__main__":
     build_sample_author()
-    app.run()
+    app.run(port=PORT)
