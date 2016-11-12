@@ -1,8 +1,11 @@
 $( document ).ready(function() {
-
+    var apikey;
+    $.getJSON('credentials.json', function(data) {
+        apikey = data.apikey;
+        console.log(apikey);
+    });
     // alert("welcome");
-    $("body").append('Test');
-    $("#status").text("hello world");
+    // $("#status").text("hello world");
 
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
         console.log(tabs[0].url);
@@ -13,7 +16,7 @@ $( document ).ready(function() {
     // var url = window.location.href;
     function make_author_request(tab_url){
         $.ajax({
-            url: "https://gateway-a.watsonplatform.net/calls/url/URLGetAuthors?apikey=aee14f13b4f1254971213bab9b2c86b41e9c5fad",
+            url: "https://gateway-a.watsonplatform.net/calls/url/URLGetAuthors?apikey=" + apikey,
             type: "POST",
             data:{
                 // apikey: "aee14f13b4f1254971213bab9b2c86b41e9c5fad",
@@ -29,23 +32,22 @@ $( document ).ready(function() {
             }
         });
     }
-    
+
     function make_sentiment_request(tab_url){
         $.ajax({
-            url: "https://gateway-a.watsonplatform.net/calls/url/URLGetTextSentiment?apikey=aee14f13b4f1254971213bab9b2c86b41e9c5fad",
+            url: "https://gateway-a.watsonplatform.net/calls/url/URLGetTextSentiment?apikey=" + apikey,
             type: "POST",
             data:{
-                // apikey: "aee14f13b4f1254971213bab9b2c86b41e9c5fad",
                 outputMode: "json",
                 url: tab_url,
             },
             cache: false,
             success: function(data){
                 console.log(data)
-                var sentiment = Math.round(Math.abs(parseFloat(data.docSentiment.score)) * 10) / 10;
-                $("#sentiment").text(String(sentiment))
+                var sentiment = Math.round(Math.abs(parseFloat(data.docSentiment.score)) * 10) / 10.0;
+                $("#sentiment").append(String(sentiment))
             }
         });
     }
-    
+
 });
