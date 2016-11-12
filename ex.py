@@ -1,7 +1,10 @@
-API_KEY = 'aee14f13b4f1254971213bab9b2c86b41e9c5fad'
+# API_KEY = 'aee14f13b4f1254971213bab9b2c86b41e9c5fad'
 
 import json
 from watson_developer_cloud import AlchemyLanguageV1
+
+credentials = json.load(open('credentials.json'))
+API_KEY = credentials['apikey']
 
 alchemy_language = AlchemyLanguageV1(api_key=API_KEY)
 
