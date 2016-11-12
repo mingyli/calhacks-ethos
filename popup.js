@@ -73,16 +73,15 @@ $( document ).ready(function() {
             author_bias = author_bias.toFixed(2);
 
             var str_value = change_bar_color(author_bias, "#author-bias-bar");
-            $("#author-bias-bar").text("Bias: " + str_value);
-            $("#bias-hover").attr('title', 'Bias: ' + str_value).tooltip('fixTitle').tooltip('show');
+            // $("#author-bias-bar").text("Bias: " + str_value);
+            $("#bias-hover").attr('title', str_value).tooltip('fixTitle');
 
             var author_openness = Math.abs(parseFloat(json.openness)) * 200.0;
             author_openness = author_openness.toFixed(2);
 
             var str_value2 = change_bar_color(author_openness, "#author-open-bar");
-            $("#author-open-bar").text("Openness: " + str_value2);
-            $("#openness-hover").attr('title', 'Openness: ' + str_value2).tooltip('fixTitle').tooltip('show');
-            
+            $("#openness-hover").attr('title', str_value2).tooltip('fixTitle');
+
         });
 
     };
