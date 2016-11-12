@@ -4,13 +4,15 @@ $( document ).ready(function() {
         apikey = data.apikey;
         console.log(apikey);
     });
-
+    
+      
 
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
         console.log(tabs[0].url);
         make_author_request(tabs[0].url);
         make_sentiment_request(tabs[0].url);
         make_profile_request();
+        $('[data-toggle="tooltip"]').tooltip();
     });
 
     function make_author_request(tab_url){
