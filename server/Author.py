@@ -1,3 +1,5 @@
+import json
+
 class Author():
     objectivity = None
     openness = None
@@ -16,6 +18,7 @@ class Author():
 
     @classmethod
     def fromCache(cls, cache):
+        print(cache)
         ret = cls(cache.name)
         ret.personality = json.loads(cache.personality)                                      
         ret.taxonomies = json.loads(cache.taxonomies)                                                                                                                   

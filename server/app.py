@@ -38,11 +38,12 @@ def rate(author_name, taxonomy):
         familiarity = author.taxonomies[taxonomy] / sum(author.taxonomies.values())
     else:
         familiarity = 0
-
-    for trait in author.personality['values']:
-        if trait['trait_id'] != "value_openness_to_change": continue
-        author.openness = trait['percentile']
-        break
+    
+    if 'values' in author.personality:
+        for trait in author.personality['values']:
+            if trait['trait_id'] != "value_openness_to_change": continue
+            author.openness = trait['percentile']
+            break
 
     author.familiarity = familiarity
     result = {
@@ -83,7 +84,7 @@ def update_author(author):
         except WatsonException as e:
             print(e)
         text_data.append(text)
-
+    
     update_objectivity_of(author, emotion_data)
     update_personality_of(author, text_data)
     update_taxonomy_of(author, articles)
@@ -102,7 +103,10 @@ def update_objectivity_of(author, data):
 def update_personality_of(author, data):
     full_text = ""
     for text in data: full_text += text['text'] + " "
-    personality = personality_insights.profile(full_text.encode('utf-8')) 
+    try:
+        personality = personality_insights.profile(full_text.encode('utf-8'))
+    except WatsonException as e:
+        print(e)
     author.personality = personality
     print(personality)
     return personality
@@ -132,6 +136,7 @@ def get_author_by_name(name):
         db.session.commit()
     else:
         author = Author.fromCache(cache)
+        if not author.objectivity: update_author(author)
     return author
     
 def build_sample_author():
@@ -157,6 +162,9 @@ class CachedAuthor(db.Model):
         self.openness = openness
         self.personality = json.dumps(personality)
         self.taxonomies = json.dumps(taxonomies)
+    
+    def __repr__(self):
+        return "<CachedAuthor {}\n objectivity:{}\npersonality:{}\n,openness:{}\ntaxonomies:{}>".format(self.name, self.objectivity, self.personality, self.openness, self.taxonomies)
 
     @classmethod
     def fromAuthor(cls, author):
