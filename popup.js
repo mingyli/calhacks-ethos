@@ -108,6 +108,12 @@ $( document ).ready(function() {
             success: function(data){
                 console.log(data);
                 data = JSON.parse(data);
+                
+                if (data.status != "OK") {
+                    display_error_message();
+                    return;
+                }
+                
                 var author_obj = 100 - (Math.abs(parseFloat(data.bias)) * 200.0);
                 console.log(data.bias);
                 author_obj = author_obj.toFixed(2);
@@ -159,6 +165,8 @@ $( document ).ready(function() {
                 $("#topic1-bar").css("width",String(lengths[0])+"%");
                 $("#topic2-bar").css("width",String(lengths[1])+"%");
                 $("#topic3-bar").css("width",String(lengths[2])+"%");
+                
+                $("#stacked-bar").tooltip("disable");
                 $("#topic1-bar").attr('title', String(array[0][1]) + " " + array[0][0] + strs[0]).tooltip('fixTitle');
                 if (num_taxonomies > 1) {
                     $("#topic2-bar").attr('title', String(array[1][1]) + " " + array[1][0] + strs[1]).tooltip('fixTitle');
@@ -168,12 +176,7 @@ $( document ).ready(function() {
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                // alert(xhr.status);
-                // alert(thrownError);
-                $("#obj-hover").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
-                $("#openness-hover").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
-                $("#stacked-bar").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
-
+                display_error_message();
             }
 
         });
@@ -250,4 +253,10 @@ $( document ).ready(function() {
         $(id).css("width",str+"%");
         return str
     };
+    
+    function display_error_message() {
+        $("#obj-hover").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
+        $("#openness-hover").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
+        $("#stacked-bar").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
+    }
 });
