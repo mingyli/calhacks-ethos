@@ -3,18 +3,12 @@
 <head>
     <title>Getting Started Extension's Popup</title>
 
-    <!-- <script src="loader.js"></script> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Open+Sans|Raleway">
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-    <!-- jQuery library -->
     <script src="jquery-3.1.1.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <script src="lib/diffbot-js-client/diffbot.js"></script>
+    <script src="article-detection.js"></script>
     <script src="bootstrap.min.js"></script>
-
     <script src="popup.js"></script>
     <style type="text/css">
     html {
@@ -91,7 +85,17 @@
             <tr>
                 <td class="author-label"><p>Topics</p></td>
                 <td>
-                    <div id="stacked-bar" class="progress"></div>
+                    <div id="stacked-bar" class="progress">
+                        <div id="topic1-bar" class="progress-bar progress-bar-success" role="progressbar" style="width:40%" data-toggle="tooltip" title="hovered">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                        <div id="topic2-bar" class="progress-bar progress-bar-warning" role="progressbar" style="width:10%" data-toggle="tooltip" title="hovered">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                        <div id="topic3-bar" class="progress-bar progress-bar-danger" role="progressbar" style="width:20%" data-toggle="tooltip" title="hovered">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </table>
