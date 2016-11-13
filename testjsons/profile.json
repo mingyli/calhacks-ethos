@@ -1,7 +1,14 @@
+
+
 {
-    "openness": 0.21616178438963657,
-    "familiarity": 1.0,
-    "taxonomies": {"hobbies and interests": 1},
-    "bias": 0.45,
-    "name": "Michael D. Shear"
+    "openness": 0.8087769321282668,
+    "name": "Henry Fountain",
+    "familiarity": 0.4,
+    "taxonomies":
+    {
+        "technology and computing": 2,
+        "science": 1,
+        "automotive and vehicles": 2
+    },
+    "objectivity": 4.432048
 }
