@@ -1,0 +1,11 @@
+<script type="text/javascript" src="lib/diffbot.js"></script>
+<script type="text/javascript" src="article-detection.js"></script>
+<script>
+var sampleURL = "http://www.nytimes.com/2016/11/13/us/trump-protest-rallies.html"
+isArticle(sampleURL, function(article){
+    if(article) triggerChromeExtension();
+})
+function triggerChromeExtension(){
+    console.log("Article detected!");
+}
+</script>

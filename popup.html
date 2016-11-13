@@ -2,15 +2,12 @@
 <html>
 <head>
     <title>Getting Started Extension's Popup</title>
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Open+Sans|Raleway">
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-    <!-- jQuery library -->
     <script src="jquery-3.1.1.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <script src="lib/diffbot.js"></script>
+    <script src="article-detection.js"></script>
     <script src="bootstrap.min.js"></script>
     <script src="popup.js"></script>
     <style type="text/css">
@@ -53,9 +50,9 @@
 <body>
     <div class="container">
         <h2>This article's objectivity:</h2>
-        <div id="article-hover" class="progress" data-toggle="tooltip" title="hovered">
+        <div id="article-hover" class="progress" data-toggle="tooltip" title="loading">
             <div id="article-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
-                aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                aria-valuemin="0" aria-valuemax="100" style="width:00%">
                 <span class="sr-only">70% Complete</span>
             </div>
         </div>
@@ -66,9 +63,9 @@
             <tr>
                 <td width="17%" class="author-label"><p>Objectivity</p></td>
                 <td>
-                    <div id="obj-hover" class="progress" data-toggle="tooltip" title="hovered">
+                    <div id="obj-hover" class="progress" data-toggle="tooltip" title="loading">
                         <div id="author-obj-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
-                            aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                            aria-valuemin="0" aria-valuemax="100" style="width:00%">
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
@@ -77,9 +74,9 @@
             <tr>
                 <td class="author-label"><p>Openness</p></td>
                 <td>
-                    <div id="openness-hover" class="progress" data-toggle="tooltip" title="hovered">
+                    <div id="openness-hover" class="progress" data-toggle="tooltip" title="loading">
                         <div id="author-open-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
-                            aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                            aria-valuemin="0" aria-valuemax="100" style="width:00%">
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
@@ -88,8 +85,16 @@
             <tr>
                 <td class="author-label"><p>Topics</p></td>
                 <td>
-                    <div id="stacked-topics" class="progress">
-                        <!--  js will insert the topics-->
+                    <div id="stacked-bar" class="progress" data-toggle="tooltip" title="loading">
+                        <div id="topic1-bar" class="progress-bar progress-bar-info" role="progressbar" style="width:0%" data-toggle="tooltip" title="loading">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                        <div id="topic2-bar" class="progress-bar progress-bar-warning" role="progressbar" style="width:0%" data-toggle="tooltip" title="loading">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                        <div id="topic3-bar" class="progress-bar progress-bar-success" role="progressbar" style="width:0%" data-toggle="tooltip" title="loading">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
                     </div>
                 </td>
             </tr>
