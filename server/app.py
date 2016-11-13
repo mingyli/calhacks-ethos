@@ -37,10 +37,11 @@ sample_author = Author("John Doe")
 def rate(author_name, taxonomy):
     author = get_author_by_name(author_name)
     if taxonomy in author.taxonomies:
-        familiarity = author.taxonomies[taxonomy] / sum(author.taxonomies.values())
+        author.taxonomies[taxonomy] += 1
     else:
-        familiarity = 0
-    
+        author.taxonomies[taxonomy] = 1
+
+    familiarity = author.taxonomies[taxonomy] / sum(author.taxonomies.values())
     if 'values' in author.personality:
         for trait in author.personality['values']:
             if trait['trait_id'] != "value_openness_to_change": continue
@@ -95,8 +96,14 @@ def update_author(author):
 
 def update_objectivity_of(author, data):
     average_sentiment = 0
-    for sentiment in data: average_sentiment += abs(float(sentiment['docSentiment']['score']))
-    average_sentiment /= len(data)
+    counted = 0
+    for sentiment in data: 
+        try:
+            average_sentiment += abs(float(sentiment['docSentiment']['score']))
+            counted += 1
+        except KeyError:
+            continue
+    average_sentiment /= counted
     author.objectivity = average_sentiment
     log(average_sentiment)
     return average_sentiment
