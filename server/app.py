@@ -2,6 +2,7 @@ import os
 import json
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS, cross_origin
 from watson_developer_cloud import AlchemyDataNewsV1
 from watson_developer_cloud import AlchemyLanguageV1
 from watson_developer_cloud import PersonalityInsightsV3
@@ -19,6 +20,7 @@ NEWS_MAX_RESULTS = os.environ['NEWS_MAX_RESULTS'] if ('NEWS_MAX_RESULTS' in os.e
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 db = SQLAlchemy(app)
+CORS(app)
 
 from Author import Author
 @app.route("/author/<author_name>/taxonomy/<taxonomy>")
