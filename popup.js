@@ -1,5 +1,6 @@
 $( document ).ready(function() {
     var apikey;
+    var author;
     $.getJSON('credentials.json', function(data) {
         apikey = data.apikey;
         console.log(apikey);
@@ -11,116 +12,173 @@ $( document ).ready(function() {
         console.log(tabs[0].url);
         make_author_request(tabs[0].url);
         make_sentiment_request(tabs[0].url);
-        make_profile_request();
+
         $('[data-toggle="tooltip"]').tooltip();
     });
 
     function make_author_request(tab_url){
-        // $.ajax({
-        //     url: "https://gateway-a.watsonplatform.net/calls/url/URLGetAuthors?apikey=" + apikey,
-        //     type: "POST",
-        //     data:{
-        //         outputMode: "json",
-        //         url: tab_url,
-        //
-        //     },
-        //     cache: false,
-        //     success: function(data){
-        //         console.log(data)
-        //         var author = data.authors.names[0]
-        //         $("#author").append(author);
-        //     }
-        // });
-        $.getJSON("testjsons/author.json", function(json) {
-            console.log(json);
-            var author = json.authors.names[0];
-            $("#author").text(author + "'s profile:");
+        $.ajax({
+            url: "https://gateway-a.watsonplatform.net/calls/url/URLGetAuthors?apikey=" + apikey,
+            type: "POST",
+            data:{
+                outputMode: "json",
+                url: tab_url,
+
+            },
+            cache: false,
+            success: function(data){
+                console.log(data)
+                author = data.authors.names[0]
+                $("#author").text(author + "'s profile:");
+                make_profile_request();
+            }
         });
+        // $.getJSON("testjsons/author.json", function(json) {
+        //     console.log(json);
+        //     var author = json.authors.names[0];
+        //     $("#author").text(author + "'s profile:");
+        // });
     };
 
     function make_sentiment_request(tab_url){
-        // $.ajax({
-        //     url: "https://gateway-a.watsonplatform.net/calls/url/URLGetTextSentiment?apikey=" + apikey,
-        //     type: "POST",
-        //     data:{
-        //         outputMode: "json",
-        //         url: tab_url,
-        //     },
-        //     cache: false,
-        //     success: function(data){
-        //         console.log(data)
-        //         var sentiment = Math.abs(parseFloat(data.docSentiment.score)) * 20.0;
-        //         sentiment = sentiment.toFixed(2);
-        //         $("#sentiment").append(String(sentiment))
-        //     }
-        // });
-        $.getJSON("testjsons/sentiment.json", function(json) {
-            console.log(json);
-            var article_obj = 100 - (Math.abs(parseFloat(json.docSentiment.score)) * 200.0);
-            article_obj = article_obj.toFixed(2);
+        $.ajax({
+            url: "https://gateway-a.watsonplatform.net/calls/url/URLGetTextSentiment?apikey=" + apikey,
+            type: "POST",
+            data:{
+                outputMode: "json",
+                url: tab_url,
+            },
+            cache: false,
+            success: function(data){
+                console.log(data);
+                var article_obj = 100 - (Math.abs(parseFloat(data.docSentiment.score)) * 200.0);
+                article_obj = article_obj.toFixed(2);
 
-            var str_value = change_bar_color(article_obj, "#article-bar");
-            //$("#article-bar").text(str_value);
-            $("#article-hover").attr('title', str_value).tooltip('fixTitle');
-
+                var str_value = generate_bar(article_obj, "#article-bar");
+                $("#article-hover").attr('title', str_value).tooltip('fixTitle');
+            }
         });
+        // $.getJSON("testjsons/sentiment.json", function(json) {
+        //     console.log(json);
+        //     var article_obj = 100 - (Math.abs(parseFloat(json.docSentiment.score)) * 200.0);
+        //     article_obj = article_obj.toFixed(2);
+        //
+        //     var str_value = generate_bar(article_obj, "#article-bar");
+        //     //$("#article-bar").text(str_value);
+        //     $("#article-hover").attr('title', str_value).tooltip('fixTitle');
+        //
+        // });
     };
 
     function make_profile_request() {
         // TODO get ajax from matthew server
-        $.getJSON("testjsons/profile.json", function(json) {
-            console.log(json);
-            var author_obj = 100 - (Math.abs(parseFloat(json.bias)) * 200.0);
-            author_obj = author_obj.toFixed(2);
+        $.ajax({
+            url: "https://calhacks16.herokuapp.com/author/" + escape(author) + "/taxonomy/asdf",
+            type: "GET",
+            cache: false,
+            success: function(data){
+                console.log(data);
+                data = JSON.parse(data);
+                var author_obj = 100 - (Math.abs(parseFloat(data.bias)) * 200.0);
+                console.log(data.bias);
+                author_obj = author_obj.toFixed(2);
 
-            var str_value = change_bar_color(author_obj, "#author-obj-bar");
-            // $("#author-bias-bar").text("Bias: " + str_value);
-            $("#obj-hover").attr('title', str_value).tooltip('fixTitle');
+                var str_value = generate_bar(author_obj, "#author-obj-bar");
+                // $("#author-bias-bar").text("Bias: " + str_value);
+                $("#obj-hover").attr('title', str_value).tooltip('fixTitle');
 
-            var author_openness = Math.abs(parseFloat(json.openness)) * 200.0;
-            author_openness = author_openness.toFixed(2);
+                var author_openness = Math.abs(parseFloat(data.openness)) * 200.0;
+                author_openness = author_openness.toFixed(2);
 
-            var str_value2 = change_bar_color(author_openness, "#author-open-bar");
-            $("#openness-hover").attr('title', str_value2).tooltip('fixTitle');
+                var str_value2 = generate_bar(author_openness, "#author-open-bar");
+                $("#openness-hover").attr('title', str_value2).tooltip('fixTitle');
 
-            var taxonomies = json.taxonomies;
-            var num_taxonomies = Object.keys(taxonomies).length;
-           
-            var array = [];
-            for(a in taxonomies){
-                array.push([a,taxonomies[a]])
-            }
-            array.sort(function(a,b){return b[1] - a[1]});
-            console.log(array);
-            
-            var total_articles = array[0][1] + array[1][1] + array[2][1];
-            var lengths = [];
-            var strs = [];
-            
-            for (i=0; i<3; i++) {
-                lengths[i] = array[i][1]/total_articles * 100;
-                if (array[i][1] === 1) {
-                    strs[i] = " article";
+                var taxonomies = data.taxonomies;
+
+                var array = [];
+                for(a in taxonomies){
+                    console.log(a)
+                    array.push([a,taxonomies[a]])
                 }
-                else {
-                    strs[i] = " articles";
+                array.sort(function(a,b){return b[1] - a[1]});
+                console.log(array);
+
+                var total_articles = array[0][1] + array[1][1] + array[2][1];
+                var lengths = [];
+                var strs = [];
+
+                for (i=0; i<3; i++) {
+                    lengths[i] = array[i][1]/total_articles * 100;
+                    if (array[i][1] === 1) {
+                        strs[i] = " article";
+                    }
+                    else {
+                        strs[i] = " articles";
+                    }
                 }
+
+                $("#topic1-bar").css("width",String(lengths[0])+"%");
+                $("#topic2-bar").css("width",String(lengths[1])+"%");
+                $("#topic3-bar").css("width",String(lengths[2])+"%");
+                $("#topic1-bar").attr('title', String(array[0][1]) + " " + array[0][0] + strs[0]).tooltip('fixTitle');
+                $("#topic2-bar").attr('title', String(array[1][1]) + " " + array[1][0] + strs[1]).tooltip('fixTitle');
+                $("#topic3-bar").attr('title', String(array[2][1]) + " " + array[2][0] + strs[2]).tooltip('fixTitle');
             }
-      
-            $("#topic1-bar").css("width",String(lengths[0])+"%");
-            $("#topic2-bar").css("width",String(lengths[1])+"%");
-            $("#topic3-bar").css("width",String(lengths[2])+"%");
-            $("#topic1-bar").attr('title', String(array[0][1]) + " " + array[0][0] + strs[0]).tooltip('fixTitle');
-            $("#topic2-bar").attr('title', String(array[1][1]) + " " + array[1][0] + strs[1]).tooltip('fixTitle');
-            $("#topic3-bar").attr('title', String(array[2][1]) + " " + array[2][0] + strs[2]).tooltip('fixTitle');
+
         });
+        // $.getJSON("testjsons/profile.json", function(json) {
+        //     console.log(json);
+        //     var author_obj = 100 - (Math.abs(parseFloat(json.bias)) * 200.0);
+        //     author_obj = author_obj.toFixed(2);
+        //
+        //     var str_value = generate_bar(author_obj, "#author-obj-bar");
+        //     // $("#author-bias-bar").text("Bias: " + str_value);
+        //     $("#obj-hover").attr('title', str_value).tooltip('fixTitle');
+        //
+        //     var author_openness = Math.abs(parseFloat(json.openness)) * 200.0;
+        //     author_openness = author_openness.toFixed(2);
+        //
+        //     var str_value2 = generate_bar(author_openness, "#author-open-bar");
+        //     $("#openness-hover").attr('title', str_value2).tooltip('fixTitle');
+        //
+        //     var taxonomies = json.taxonomies;
+        //     var num_taxonomies = Object.keys(taxonomies).length;
+        //
+        //     var array = [];
+        //     for(a in taxonomies){
+        //         array.push([a,taxonomies[a]])
+        //     }
+        //     array.sort(function(a,b){return b[1] - a[1]});
+        //     console.log(array);
+        //
+        //     var total_articles = array[0][1] + array[1][1] + array[2][1];
+        //     var lengths = [];
+        //     var strs = [];
+        //
+        //     for (i=0; i<3; i++) {
+        //         lengths[i] = array[i][1]/total_articles * 100;
+        //         if (array[i][1] === 1) {
+        //             strs[i] = " article";
+        //         }
+        //         else {
+        //             strs[i] = " articles";
+        //         }
+        //     }
+        //
+        //     $("#topic1-bar").css("width",String(lengths[0])+"%");
+        //     $("#topic2-bar").css("width",String(lengths[1])+"%");
+        //     $("#topic3-bar").css("width",String(lengths[2])+"%");
+        //     $("#topic1-bar").attr('title', String(array[0][1]) + " " + array[0][0] + strs[0]).tooltip('fixTitle');
+        //     $("#topic2-bar").attr('title', String(array[1][1]) + " " + array[1][0] + strs[1]).tooltip('fixTitle');
+        //     $("#topic3-bar").attr('title', String(array[2][1]) + " " + array[2][0] + strs[2]).tooltip('fixTitle');
+        // });
 
     };
 
 
     // takes a percentage value and the id of the html element and updates
     // the appearance of the bar
-    function change_bar_color(value, id) {
+    function generate_bar(value, id) {
         if (value > 100) {
             value = 100;
         }
