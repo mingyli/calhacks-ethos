@@ -5,6 +5,8 @@ class Author():
     openness = None
     taxonomies = ()
     personality = ()
+    no_data = False
+
     def __init__(self, name):
         self.name = name
 

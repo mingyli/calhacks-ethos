@@ -36,6 +36,8 @@ sample_author = Author("John Doe")
 
 def rate(author_name, taxonomy):
     author = get_author_by_name(author_name)
+    if author.no_data: return {"status" : "No data"}
+
     if taxonomy in author.taxonomies:
         author.taxonomies[taxonomy] += 1
     else:
@@ -50,6 +52,7 @@ def rate(author_name, taxonomy):
 
     author.familiarity = familiarity
     result = {
+            "status": "OK",
             "name": author.name,
             "bias": author.objectivity,
             "familiarity": author.familiarity,
@@ -76,7 +79,9 @@ def update_author(author):
         articles = articles['result']['docs']
     except KeyError:
         print(articles['status'])
+        author.no_data = True
         return
+
     for article in articles:
         article_url =  article['source']['enriched']['url']['url']
         print(article_url)
