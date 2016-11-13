@@ -57,7 +57,7 @@ def rate(author_name, taxonomy):
 
 def update_author(author):
     print(author.name, "to be updated,")
-    start_range = 'now-2d' if DEVELOPMENT else 'now-10d'
+    start_range = 'now-5d' if DEVELOPMENT else 'now-10d'
     try:
         articles = alchemy_data_news.get_news_documents(
                 start=start_range,
