@@ -6,10 +6,13 @@ $( document ).ready(function() {
     });
 
 
+
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
         console.log(tabs[0].url);
         make_author_request(tabs[0].url);
         make_sentiment_request(tabs[0].url);
+        make_profile_request();
+        $('[data-toggle="tooltip"]').tooltip();
     });
 
     function make_author_request(tab_url){
@@ -28,12 +31,12 @@ $( document ).ready(function() {
         //         $("#author").append(author);
         //     }
         // });
-        $.getJSON("author.json", function(json) {
+        $.getJSON("testjsons/author.json", function(json) {
             console.log(json);
             var author = json.authors.names[0];
-            $("#author").append(author);
+            $("#author").text(author + "'s profile:");
         });
-    }
+    };
 
     function make_sentiment_request(tab_url){
         // $.ajax({
@@ -51,28 +54,57 @@ $( document ).ready(function() {
         //         $("#sentiment").append(String(sentiment))
         //     }
         // });
-        $.getJSON("sentiment.json", function(json) {
+        $.getJSON("testjsons/sentiment.json", function(json) {
             console.log(json);
-            var sentiment = Math.abs(parseFloat(json.docSentiment.score)) * 20.0;
-            sentiment = sentiment.toFixed(2);
-            
-            if (sentiment > 10) {
-                sentiment = 10
-            }
-            if (sentiment > 7) {
-                $("#article-bar").addClass("progress-bar-danger");
-            }
-            else if (sentiment > 3) {
-                $("#article-bar").addClass("progress-bar-warning");
-            }
-            else {
-                $("#article-bar").addClass("progress-bar-success");
-            }
-            
-            var sentiment_str = String(sentiment*10);
-            
-            $( "#article-bar" ).css("width",sentiment_str+"%");
-            $( "#article-bar" ).text(sentiment_str);
+            var article_obj = 100 - (Math.abs(parseFloat(json.docSentiment.score)) * 200.0);
+            article_obj = article_obj.toFixed(2);
+
+            var str_value = change_bar_color(article_obj, "#article-bar");
+            //$("#article-bar").text(str_value);
+            $("#article-hover").attr('title', str_value).tooltip('fixTitle');
+
         });
-    }
+    };
+
+    function make_profile_request() {
+        // TODO get ajax from matthew server
+        $.getJSON("testjsons/profile.json", function(json) {
+            console.log(json);
+            var author_obj = 100 - (Math.abs(parseFloat(json.bias)) * 200.0);
+            author_obj = author_obj.toFixed(2);
+
+            var str_value = change_bar_color(author_obj, "#author-obj-bar");
+            // $("#author-bias-bar").text("Bias: " + str_value);
+            $("#obj-hover").attr('title', str_value).tooltip('fixTitle');
+
+            var author_openness = Math.abs(parseFloat(json.openness)) * 200.0;
+            author_openness = author_openness.toFixed(2);
+
+            var str_value2 = change_bar_color(author_openness, "#author-open-bar");
+            $("#openness-hover").attr('title', str_value2).tooltip('fixTitle');
+
+        });
+
+    };
+
+
+    // takes a percentage value and the id of the html element and updates
+    // the appearance of the bar
+    function change_bar_color(value, id) {
+        if (value > 100) {
+            value = 100;
+        }
+        if (value > 70) {
+            $(id).addClass("progress-bar-success");
+        }
+        else if (value > 30) {
+            $(id).addClass("progress-bar-warning");
+        }
+        else {
+            $(id).addClass("progress-bar-danger");
+        }
+        var str = String(value);
+        $(id).css("width",str+"%");
+        return str
+    };
 });
