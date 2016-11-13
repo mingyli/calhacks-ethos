@@ -7,15 +7,17 @@ $( document ).ready(function() {
         console.log(apikey);
     });
 
-
-
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
         console.log(tabs[0].url);
-        make_author_request(tabs[0].url);
-        make_sentiment_request(tabs[0].url);
-        make_taxonomy_request(tabs[0].url);
-
         $('[data-toggle="tooltip"]').tooltip();
+        
+        isArticle(tabs[0].url, function(article){
+            if(article) {
+                make_author_request(tabs[0].url);
+                make_sentiment_request(tabs[0].url);
+                make_taxonomy_request(tabs[0].url);
+            }
+        });
     });
 
     function make_author_request(tab_url){
@@ -237,8 +239,8 @@ $( document ).ready(function() {
     // takes a percentage value and the id of the html element and updates
     // the appearance of the bar
     function generate_bar(value, id) {
-        if (value > 100) {
-            value = 100;
+        if (value < 0) {
+            value = 0;
         }
         if (value > 70) {
             $(id).addClass("progress-bar-success");

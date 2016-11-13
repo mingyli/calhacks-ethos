@@ -10,7 +10,7 @@
     "default_popup": "popup.html"
   },
   "content_scripts": [ {
-    "js": [ "jquery-3.1.1.min.js", "bootstrap.min.js"],
+    "js": [ "jquery-3.1.1.min.js", "bootstrap.min.js", "article-detection.js", "lib/diffbot.js"],
     "matches": [ "http://*/*", "https://*/*"]
   }],
   "permissions": [
