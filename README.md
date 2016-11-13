@@ -3,7 +3,7 @@
 
 # Ethos - Calhacks 3.0 Project
 
-# Contributors
+## Contributors
 | Name  | username |
 | ------------- | ------------- |
 | Jonathan Fung  | jonfung  |
@@ -11,6 +11,13 @@
 | Ming Li | mingyli |
 | Matthew Soh | msohcw |
 | William Song | song-william |
+
+## Project Structure
+* src - unpacked Chrome extension
+* server - Flask server files
+* requirements.txt, runtime.txt, Procfile - Heroku deploy files
+* lib - external libs
+* tests - test files, mainly JSON 
 
 ## Inspiration
 November 9th was an eventful day for all, and likely a day that will go down in history. Regardless of which side one is on, there are many lessons that must be learned. We saw the power of the media firsthand, as journalists published article after article in a deluge of political news, rhetoric and prediction, a chaotic echo chamber that did no one any good. We want to raise the standard of journalistic integrity, and remind everyone of how easily we can be biased and swayed. That inspired us to build Ethos, an automated tool that analyses the words we consume. It’s easy for humans to be unobjective, and so we hope that the unbiased rationality of computers can be brought in to counter our inherently tinted lenses.
