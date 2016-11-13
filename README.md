@@ -1,5 +1,5 @@
 
-![Picture](https://files.catbox.moe/co9lip.png)
+![Picture](https://files.catbox.moe/oixl18.png)
 
 # Calhacks Project 2016
 
