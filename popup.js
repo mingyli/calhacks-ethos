@@ -85,9 +85,20 @@ $( document ).ready(function() {
 
             var taxonomies = json.taxonomies;
             var num_taxonomies = Object.keys(taxonomies).length;
-
-
+            var total_articles = 0
             
+            for (i=0; i<num_taxonomies; i++) {
+                total_articles += taxonomies[Object.keys(taxonomies)[i]];
+            }
+            var array = [];
+            for(a in taxonomies){
+                array.push([a,taxonomies[a]])
+            }
+            array.sort(function(a,b){return b[1] - a[1]});
+            console.log(array);
+            
+            $("#topic1-bar").attr('title', array[0][0]).tooltip('fixTitle');
+            $("#topic2-bar").attr('title', array[1][0]).tooltip('fixTitle');
         });
 
     };
