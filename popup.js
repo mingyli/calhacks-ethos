@@ -6,6 +6,12 @@ $( document ).ready(function() {
         apikey = data.apikey;
         console.log(apikey);
     });
+    
+    $(".btn").click(function(){
+        console.log("click");
+        $(".btn-holder").remove();
+        $("#feedback-text").text("Thank you for your feedback.")
+    });
 
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
         console.log(tabs[0].url);

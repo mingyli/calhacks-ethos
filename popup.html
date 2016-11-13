@@ -13,13 +13,14 @@
     <style type="text/css">
     html {
         width: 400px;
-        height: 300px;
-        padding: 10px;
+        /*padding: 0px 15px;*/
     }
+    
     body {
         font-family: 'Open Sans', Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
         font-size: 100%;
     }
+    
     h2 {
         font-size: 16px;
         font-weight: 600;
@@ -32,10 +33,6 @@
 
     .progress {
         margin-bottom: 0px;
-    }
-
-    .container {
-        padding: 10px 0px;
     }
 
     .author-label {
@@ -100,7 +97,15 @@
             </tr>
         </table>
     </div>
-
+    <div class="container" style="padding-bottom:10px;">
+        <table style="width:100%">
+            <tr>
+                <td style="padding-bottom:8px; width:24%"><h2 id="feedback-text">Feedback:</h2></td>
+                <td class="btn-holder" style="width:38%"><button type="button" class="btn btn-success" style="width:95%">I agree</button></td>
+                <td class="btn-holder" style="width:38%"><button type="button" class="btn btn-danger" style="width:95%">I disagree</button></td>
+            </tr>
+        </table>
+    </div>
 </body>
 
 
