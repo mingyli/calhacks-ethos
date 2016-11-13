@@ -11,11 +11,13 @@ $( document ).ready(function() {
         console.log(tabs[0].url);
         $('[data-toggle="tooltip"]').tooltip();
         
-        isArticle(tabs[0].url, function(article){
+        detectArticle(tabs[0].url, function(article){
             if(article) {
                 make_author_request(tabs[0].url);
                 make_sentiment_request(tabs[0].url);
                 make_taxonomy_request(tabs[0].url);
+            }else{
+              console.log("popup says not an article");
             }
         });
     });
