@@ -1,4 +1,6 @@
-# calhacks project 2016
+
+![Picture](https://files.catbox.moe/koeqts.png)
+# Calhacks Project 2016
 
 # Contributors
 | Name  | username |
@@ -7,8 +9,9 @@
 | Julia Luo  | julialuo  |
 | Ming Li | mingyli |
 | Matthew Soh | msohcw |
+| William Song | song-william |
 
 
 ```python
-print("hello world")
+print('hello wurld')
 ```
