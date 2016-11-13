@@ -83,6 +83,11 @@ $( document ).ready(function() {
             var str_value2 = change_bar_color(author_openness, "#author-open-bar");
             $("#openness-hover").attr('title', str_value2).tooltip('fixTitle');
 
+            var taxonomies = json.taxonomies;
+            var num_taxonomies = Object.keys(taxonomies).length;
+
+
+            
         });
 
     };

@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Calhacks",
-  "description": "This extension shows a Google Image search result for the current page",
+  "description": "This extension ranks the bias of an article and its author.",
   "version": "1.0",
 
   "browser_action": {
@@ -10,7 +10,7 @@
     "default_popup": "popup.html"
   },
   "content_scripts": [ {
-    "js": [ "jquery.min.js", "bootstrap.min.js" ],
+    "js": [ "jquery-3.1.1.min.js", "bootstrap.min.js"],
     "matches": [ "http://*/*", "https://*/*"]
   }],
   "permissions": [
