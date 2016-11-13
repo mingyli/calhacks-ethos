@@ -29,7 +29,7 @@ function isOutsideURL(url){
 function addRating(stories, links){
     for(var i = 0; i < stories.length; i++){
         if($(stories[i]).find('.article-rating').length > 0) continue;
-        var ratingBar = "<div id = 'rating-bar-" + ratings + "' class = 'article-rating' style='width:100%;height:2em;box-shadow: 0px 2px 5px rgba(0,0,0,0.5);font-size:1.2em;z-index:1000;text-align:center;position:relative;padding:0.5em;color:white;box-sizing:border-box;opacity:0.9;'>Analysing article...</div>";
+        var ratingBar = "<div id = 'rating-bar-" + ratings + "' class = 'article-rating' style='width:100%;height:2em;box-shadow: 0px 2px 5px rgba(0,0,0,0.5);font-size:1.2em;z-index:1000;text-align:center;position:relative;padding:0.5em;color:white;box-sizing:border-box;opacity:0.9;'><span style='color:black'>Analysing article...</span></div>";
 
         $(stories[i]).children().first().after(ratingBar);
         urlRatingMap[links[i]] = ratings;
@@ -42,22 +42,31 @@ function addRating(stories, links){
             },
             async: true,
             success: function(data){
+              var ratingBarId = "#rating-bar-" + urlRatingMap[data.url];
+              var currentStyle = $(ratingBarId).attr('style');
+              if(data.status == "OK"){
                 var articleObj = Math.max(100 - (Math.abs(parseFloat(data.docSentiment.score)) * 200.0), 0);
                 articleObj = articleObj.toFixed(2);
-                var ratingBarId = "#rating-bar-" + urlRatingMap[data.url];
                 var color = '#5cb85c';
                 if(articleObj < 70) color = '#f0ad4e';
                 if(articleObj < 30) color = '#c9302c';
                 $(ratingBarId).text("Objectivity - " + articleObj);
-                var currentStyle = $(ratingBarId).attr('style');
                 $(ratingBarId).attr('style', currentStyle + 'background-color:' + color + ';');
+              }else{
+                $(ratingBarId).text("Could not analyse article");
+                $(ratingBarId).attr('style', currentStyle + 'color:black;');
+              }
             }
         });
         ratings++;
     }
 }
 
+var scanLock = false;
+
 function scanStories(){
+   if(scanLock) return;
+   scanLock = true;
    var stories = $("div[role='article'][aria-label='Story']");
    var links = [];
    var article_stories = [];
@@ -74,4 +83,5 @@ function scanStories(){
         }
    }
    addRating(article_stories, links)
+   scanLock = false;
 }
