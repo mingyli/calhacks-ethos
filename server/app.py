@@ -56,12 +56,12 @@ def rate(author_name, taxonomy):
 
 def update_author(author):
     print(author.name, "to be updated,")
-    start_range = 'now-3d'
+    start_range = 'now-2d' if DEVELOPMENT else 'now-10d'
     try:
         articles = alchemy_data_news.get_news_documents(
                 start=start_range,
                 end="now",
-                max_results=1,
+                max_results= (1 if DEVELOPMENT else 10),
                 query_fields={
                     'enriched.url.author': author.name
                     }, 
@@ -127,6 +127,9 @@ def get_author_by_name(name):
     if not cache:
         author = Author(name)
         update_author(author)
+        cached_author = CachedAuthor.fromAuthor(author)
+        db.session.add(cached_author)
+        db.session.commit()
     else:
         author = Author.fromCache(cache)
     return author
@@ -137,7 +140,6 @@ def build_sample_author():
     sample_author = Author(sample_name)
     sample_author.build_sample_data()
     return sample_author
-
 
 ## DB Classes
 
@@ -157,12 +159,13 @@ class CachedAuthor(db.Model):
         self.taxonomies = json.dumps(taxonomies)
 
     @classmethod
-    def fromCache(cls, author):
-        ret = cls(author.name)
-        ret.personality = json.loads(author.personality)
-        ret.taxonomies = json.loads(author.taxonomies)
-        ret.objectivity = author.objectivitys
-        ret.openness = author.openness
+    def fromAuthor(cls, author):
+        return cls( author.name, \
+                    author.objectivity, \
+                    author.openness, \
+                    author.personality, \
+                    author.taxonomies \
+                    )
 
 ## Flask Main
 
