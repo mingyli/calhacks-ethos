@@ -13,6 +13,8 @@ API_USERNAME = os.environ['IBM_SERVICE_USERNAME']
 API_PASSWORD = os.environ['IBM_SERVICE_PASSWORD']
 DEVELOPMENT = (os.environ['FLASK_ENVIRONMENT'] == 'development')
 DATABASE_URL = os.environ['DATABASE_URL']
+NEWS_DATE_RANGE = os.environ['NEWS_DATE_RANGE'] if ('NEWS_DATE_RANGE' in os.environ) else 'now-10d' 
+NEWS_MAX_RESULTS = os.environ['NEWS_MAX_RESULTS'] if ('NEWS_MAX_RESULTS' in os.environ) else 10
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
@@ -57,12 +59,12 @@ def rate(author_name, taxonomy):
 
 def update_author(author):
     print(author.name, "to be updated,")
-    start_range = 'now-5d' if DEVELOPMENT else 'now-10d'
+    start_range = 'now-5d' if DEVELOPMENT else NEWS_DATE_RANGE
     try:
         articles = alchemy_data_news.get_news_documents(
                 start=start_range,
                 end="now",
-                max_results= (1 if DEVELOPMENT else 10),
+                max_results= (3 if DEVELOPMENT else NEWS_MAX_RESULTS),
                 query_fields={
                     'enriched.url.author': author.name
                     }, 
