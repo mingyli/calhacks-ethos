@@ -50,7 +50,7 @@ def rate(author_name, taxonomy):
     author.familiarity = familiarity
     result = {
             "name": author.name,
-            "objectivity": author.objectivity,
+            "bias": author.objectivity,
             "familiarity": author.familiarity,
             "openness": author.openness,
             "taxonomies": author.taxonomies
