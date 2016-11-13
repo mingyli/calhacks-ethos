@@ -71,7 +71,7 @@ $( document ).ready(function() {
         //
         // });
     };
-    
+
     function make_taxonomy_request(tab_url){
         $.ajax({
             url: "https://gateway-a.watsonplatform.net/calls/url/URLGetRankedTaxonomy?apikey=" + apikey,
@@ -100,7 +100,7 @@ $( document ).ready(function() {
         if (author == undefined || taxonomy == undefined) {
             return;
         }
-        
+
         $.ajax({
             url: "https://calhacks16.herokuapp.com/author/" + escape(author) + "/taxonomy/" + escape(taxonomy),
             type: "GET",
@@ -131,17 +131,17 @@ $( document ).ready(function() {
                 }
                 array.sort(function(a,b){return b[1] - a[1]});
                 console.log(array);
-                
+
                 var num_taxonomies = Object.keys(taxonomies).length;
                 var total_articles = 0;
                 var lengths = [];
                 var strs = [];
-                
+
                 for (i=0; i<3; i++) {
                     lengths[i] = 0;
                     strs[i] = "";
                 }
-                
+
                 for (i=0; i< Math.min(3, num_taxonomies); i++) {
                     total_articles += array[i][1];
                 }
@@ -166,13 +166,21 @@ $( document ).ready(function() {
                 if (num_taxonomies > 2) {
                     $("#topic3-bar").attr('title', String(array[2][1]) + " " + array[2][0] + strs[2]).tooltip('fixTitle');
                 }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                // alert(xhr.status);
+                // alert(thrownError);
+                $("#obj-hover").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
+                $("#openness-hover").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
+                $("#stacked-bar").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
+
             }
 
         });
-        
+
         author = undefined;
         taxonomy = undefined;
-        
+
         // $.getJSON("testjsons/profile.json", function(json) {
         //     console.log(json);
         //     var author_obj = 100 - (Math.abs(parseFloat(json.bias)) * 200.0);
