@@ -44,12 +44,6 @@ def rate(author_name, taxonomy):
         author.taxonomies[taxonomy] = 1
 
     familiarity = author.taxonomies[taxonomy] / sum(author.taxonomies.values())
-    if 'values' in author.personality:
-        for trait in author.personality['values']:
-            if trait['trait_id'] != "value_openness_to_change": continue
-            author.openness = trait['percentile']
-            break
-
     author.familiarity = familiarity
     result = {
             "status": "OK",
@@ -121,6 +115,13 @@ def update_personality_of(author, data):
     except WatsonException as e:
         print(e)
     author.personality = personality
+    
+    if 'values' in author.personality:
+        for trait in author.personality['values']:
+            if trait['trait_id'] != "value_openness_to_change": continue
+            author.openness = trait['percentile']
+            break
+
     log(personality)
     return personality
 
