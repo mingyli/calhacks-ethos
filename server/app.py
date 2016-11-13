@@ -31,6 +31,13 @@ personality_insights = PersonalityInsightsV3(
                         version = '2016-10-20',
                         username = API_USERNAME,
                         password = API_PASSWORD)
+@app.route("/author/list")
+def list_authors():
+    cache = CachedAuthor.query.all()
+    cache = [{'name': author.name, 'objectivity': author.objectivity} for author in cache]
+    ret = {"status": "OK",
+            "result": cache }
+    return json.dumps(ret)
 
 sample_author = Author("John Doe")
 
