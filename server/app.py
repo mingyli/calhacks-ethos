@@ -99,7 +99,7 @@ def update_objectivity_of(author, data):
     average_sentiment /= len(data)
     objectivity = average_sentiment * 20
     author.objectivity = objectivity
-    print(objectivity)
+    log(objectivity)
     return objectivity
 
 def update_personality_of(author, data):
@@ -110,7 +110,7 @@ def update_personality_of(author, data):
     except WatsonException as e:
         print(e)
     author.personality = personality
-    print(personality)
+    log(personality)
     return personality
 
 def update_taxonomy_of(author, articles):
@@ -125,7 +125,7 @@ def update_taxonomy_of(author, articles):
             else:
                 taxonomies[label] = 1
     author.taxonomies = taxonomies
-    print(taxonomies)
+    log(taxonomies)
     return taxonomies
 
 def get_author_by_name(name):
@@ -176,6 +176,11 @@ class CachedAuthor(db.Model):
                     author.personality, \
                     author.taxonomies \
                     )
+
+## Utils
+def log(obj):
+    if not DEVELOPMENT: return
+    print(obj)
 
 ## Flask Main
 
