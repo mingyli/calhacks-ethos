@@ -34,7 +34,7 @@ $( document ).ready(function() {
         $.getJSON("testjsons/author.json", function(json) {
             console.log(json);
             var author = json.authors.names[0];
-            $("#author").append(author);
+            $("#author").text(author + "'s profile:");
         });
     };
 
@@ -56,11 +56,12 @@ $( document ).ready(function() {
         // });
         $.getJSON("testjsons/sentiment.json", function(json) {
             console.log(json);
-            var article_bias = Math.abs(parseFloat(json.docSentiment.score)) * 200.0;
-            article_bias = article_bias.toFixed(2);
+            var article_obj = 100 - (Math.abs(parseFloat(json.docSentiment.score)) * 200.0);
+            article_obj = article_obj.toFixed(2);
 
-            var str_value = change_bar_color(article_bias, "#article-bar");
-            $("#article-bar").text(str_value);
+            var str_value = change_bar_color(article_obj, "#article-bar");
+            //$("#article-bar").text(str_value);
+            $("#article-hover").attr('title', str_value).tooltip('fixTitle');
 
         });
     };
@@ -69,12 +70,12 @@ $( document ).ready(function() {
         // TODO get ajax from matthew server
         $.getJSON("testjsons/profile.json", function(json) {
             console.log(json);
-            var author_bias = Math.abs(parseFloat(json.bias)) * 200.0;
-            author_bias = author_bias.toFixed(2);
+            var author_obj = 100 - (Math.abs(parseFloat(json.bias)) * 200.0);
+            author_obj = author_obj.toFixed(2);
 
-            var str_value = change_bar_color(author_bias, "#author-bias-bar");
+            var str_value = change_bar_color(author_obj, "#author-obj-bar");
             // $("#author-bias-bar").text("Bias: " + str_value);
-            $("#bias-hover").attr('title', str_value).tooltip('fixTitle');
+            $("#obj-hover").attr('title', str_value).tooltip('fixTitle');
 
             var author_openness = Math.abs(parseFloat(json.openness)) * 200.0;
             author_openness = author_openness.toFixed(2);
@@ -94,13 +95,13 @@ $( document ).ready(function() {
             value = 100;
         }
         if (value > 70) {
-            $(id).addClass("progress-bar-danger");
+            $(id).addClass("progress-bar-success");
         }
         else if (value > 30) {
             $(id).addClass("progress-bar-warning");
         }
         else {
-            $(id).addClass("progress-bar-success");
+            $(id).addClass("progress-bar-danger");
         }
         var str = String(value);
         $(id).css("width",str+"%");

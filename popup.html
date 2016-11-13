@@ -23,12 +23,13 @@
         font-family: 'Open Sans', Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
         font-size: 100%;
     }
-    h1 {
+    h2 {
         font-size: 16px;
+        font-weight: 600;
     }
 
     p {
-        font-size: 16px;
+        font-size: 12px;
         font-weight: 600;
     }
 
@@ -39,40 +40,63 @@
     .container {
         padding: 10px 0px;
     }
+    
+    .author-label {
+        padding-top: 5px;
+        padding-right: 5px;
+        text-align: right;
+    }
 
     </style>
 
 </head>
 <body>
     <div class="container">
-        <p>This article's objectivity:</p>
-        <div class="progress">
+        <h2>This article's objectivity:</h2>
+        <div id="article-hover" class="progress" data-toggle="tooltip" title="hovered">
             <div id="article-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
-                aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                sample objectivity
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <p id="author">Author: </p>
-        <div id="obj-hover" class="progress" data-toggle="tooltip" title="hovered">
-            <div id="author-obj-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
-                aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                sample objectivity
-            </div>
-        </div>
-        <div id="openness-hover" class="progress" data-toggle="tooltip" title="hovered">
-            <div id="author-open-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
-                aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                sample opennes
-            </div>
-        </div>
-        <div class="progress" data-toggle="tooltip" title="hovered">
-            <div id="author-fam-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
                 aria-valuemin="0" aria-valuemax="100" style="width:70%">
                 <span class="sr-only">70% Complete</span>
             </div>
         </div>
+    </div>
+    <div class="container">
+        <h2 id="author">Author: </h2>
+        <table style="width:100%">
+            <tr>
+                <td width="17%" class="author-label"><p>Objectivity</p></td>
+                <td>
+                    <div id="obj-hover" class="progress" data-toggle="tooltip" title="hovered">
+                        <div id="author-obj-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
+                            aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="author-label"><p>Openness</p></td>
+                <td>
+                    <div id="openness-hover" class="progress" data-toggle="tooltip" title="hovered">
+                        <div id="author-open-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
+                            aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="author-label"><p>Topics</p></td>
+                <td>
+                    <div class="progress" data-toggle="tooltip" title="hovered">
+                        <div id="author-fam-bar" class="progress-bar" role="progressbar" aria-valuenow="70"
+                            aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 
 </body>
