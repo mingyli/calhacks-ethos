@@ -3,7 +3,7 @@ var client;
 var isArticle = false;
 
 function detectArticle(url, callback){
-  $.get("http://api.diffbot.com/v3/analyze", {
+  $.get("https://api.diffbot.com/v3/analyze", {
     token:"70ff6ee7380c5db201485b5f6da1f6b2",
     url:url
   },
