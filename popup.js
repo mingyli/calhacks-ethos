@@ -1,6 +1,7 @@
 $( document ).ready(function() {
     var apikey;
-    var author;
+    var author = undefined;
+    var taxonomy = undefined;
     $.getJSON('credentials.json', function(data) {
         apikey = data.apikey;
         console.log(apikey);
@@ -12,6 +13,7 @@ $( document ).ready(function() {
         console.log(tabs[0].url);
         make_author_request(tabs[0].url);
         make_sentiment_request(tabs[0].url);
+        make_taxonomy_request(tabs[0].url);
 
         $('[data-toggle="tooltip"]').tooltip();
     });
@@ -69,11 +71,38 @@ $( document ).ready(function() {
         //
         // });
     };
+    
+    function make_taxonomy_request(tab_url){
+        $.ajax({
+            url: "https://gateway-a.watsonplatform.net/calls/url/URLGetRankedTaxonomy?apikey=" + apikey,
+            type: "POST",
+            data:{
+                outputMode: "json",
+                url: tab_url,
+
+            },
+            cache: false,
+            success: function(data){
+                console.log(data)
+                taxonomy = data.taxonomy[0].label.split("/")[1];
+                make_profile_request();
+            }
+        });
+        // $.getJSON("testjsons/author.json", function(json) {
+        //     console.log(json);
+        //     var author = json.authors.names[0];
+        //     $("#author").text(author + "'s profile:");
+        // });
+    };
 
     function make_profile_request() {
         // TODO get ajax from matthew server
+        if (author == undefined || taxonomy == undefined) {
+            return;
+        }
+        
         $.ajax({
-            url: "https://calhacks16.herokuapp.com/author/" + escape(author) + "/taxonomy/asdf",
+            url: "https://calhacks16.herokuapp.com/author/" + escape(author) + "/taxonomy/" + escape(taxonomy),
             type: "GET",
             cache: false,
             success: function(data){
@@ -140,6 +169,10 @@ $( document ).ready(function() {
             }
 
         });
+        
+        author = undefined;
+        taxonomy = undefined;
+        
         // $.getJSON("testjsons/profile.json", function(json) {
         //     console.log(json);
         //     var author_obj = 100 - (Math.abs(parseFloat(json.bias)) * 200.0);
