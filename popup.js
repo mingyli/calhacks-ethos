@@ -85,11 +85,7 @@ $( document ).ready(function() {
 
             var taxonomies = json.taxonomies;
             var num_taxonomies = Object.keys(taxonomies).length;
-            var total_articles = 0
-            
-            for (i=0; i<num_taxonomies; i++) {
-                total_articles += taxonomies[Object.keys(taxonomies)[i]];
-            }
+           
             var array = [];
             for(a in taxonomies){
                 array.push([a,taxonomies[a]])
@@ -97,8 +93,26 @@ $( document ).ready(function() {
             array.sort(function(a,b){return b[1] - a[1]});
             console.log(array);
             
-            $("#topic1-bar").attr('title', array[0][0]).tooltip('fixTitle');
-            $("#topic2-bar").attr('title', array[1][0]).tooltip('fixTitle');
+            var total_articles = array[0][1] + array[1][1] + array[2][1];
+            var lengths = [];
+            var strs = [];
+            
+            for (i=0; i<3; i++) {
+                lengths[i] = array[i][1]/total_articles * 100;
+                if (array[i][1] === 1) {
+                    strs[i] = " article";
+                }
+                else {
+                    strs[i] = " articles";
+                }
+            }
+      
+            $("#topic1-bar").css("width",String(lengths[0])+"%");
+            $("#topic2-bar").css("width",String(lengths[1])+"%");
+            $("#topic3-bar").css("width",String(lengths[2])+"%");
+            $("#topic1-bar").attr('title', String(array[0][1]) + " " + array[0][0] + strs[0]).tooltip('fixTitle');
+            $("#topic2-bar").attr('title', String(array[1][1]) + " " + array[1][0] + strs[1]).tooltip('fixTitle');
+            $("#topic3-bar").attr('title', String(array[2][1]) + " " + array[2][0] + strs[2]).tooltip('fixTitle');
         });
 
     };
