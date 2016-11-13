@@ -82,30 +82,12 @@ $( document ).ready(function() {
 
             var str_value2 = change_bar_color(author_openness, "#author-open-bar");
             $("#openness-hover").attr('title', str_value2).tooltip('fixTitle');
-            
+
             var taxonomies = json.taxonomies;
             var num_taxonomies = Object.keys(taxonomies).length;
+
+
             
-            google.charts.load('current', {'packages':['corechart']});
-            google.charts.setOnLoadCallback(drawChart);
-            function drawChart() {
-                var list = [['Topic', 'Number of Articles']]
-                for (i=0; i<num_taxonomies; i++) {
-                    var temp = [Object.keys(taxonomies)[i], taxonomies[Object.keys(taxonomies)[i]]];
-                    list.push(temp);
-                }
-                
-
-                var data = google.visualization.arrayToDataTable(list);
-
-                var options = {
-                title: 'My Daily Activities'
-                };
-
-                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-                chart.draw(data, options);
-            }
         });
 
     };
