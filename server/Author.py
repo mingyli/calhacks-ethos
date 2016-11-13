@@ -1,5 +1,6 @@
 class Author():
     objectivity = None
+    openness = None
     taxonomies = ()
     personality = ()
     def __init__(self, name):
