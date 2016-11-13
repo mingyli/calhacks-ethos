@@ -7,15 +7,17 @@ $( document ).ready(function() {
         console.log(apikey);
     });
 
-
-
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
         console.log(tabs[0].url);
-        make_author_request(tabs[0].url);
-        make_sentiment_request(tabs[0].url);
-        make_taxonomy_request(tabs[0].url);
-
         $('[data-toggle="tooltip"]').tooltip();
+        
+        isArticle(tabs[0].url, function(article){
+            if(article) {
+                make_author_request(tabs[0].url);
+                make_sentiment_request(tabs[0].url);
+                make_taxonomy_request(tabs[0].url);
+            }
+        });
     });
 
     function make_author_request(tab_url){
@@ -71,7 +73,7 @@ $( document ).ready(function() {
         //
         // });
     };
-    
+
     function make_taxonomy_request(tab_url){
         $.ajax({
             url: "https://gateway-a.watsonplatform.net/calls/url/URLGetRankedTaxonomy?apikey=" + apikey,
@@ -100,7 +102,7 @@ $( document ).ready(function() {
         if (author == undefined || taxonomy == undefined) {
             return;
         }
-        
+
         $.ajax({
             url: "https://calhacks16.herokuapp.com/author/" + escape(author) + "/taxonomy/" + escape(taxonomy),
             type: "GET",
@@ -108,6 +110,12 @@ $( document ).ready(function() {
             success: function(data){
                 console.log(data);
                 data = JSON.parse(data);
+                
+                if (data.status != "OK") {
+                    display_error_message();
+                    return;
+                }
+                
                 var author_obj = 100 - (Math.abs(parseFloat(data.bias)) * 200.0);
                 console.log(data.bias);
                 author_obj = author_obj.toFixed(2);
@@ -131,17 +139,17 @@ $( document ).ready(function() {
                 }
                 array.sort(function(a,b){return b[1] - a[1]});
                 console.log(array);
-                
+
                 var num_taxonomies = Object.keys(taxonomies).length;
                 var total_articles = 0;
                 var lengths = [];
                 var strs = [];
-                
+
                 for (i=0; i<3; i++) {
                     lengths[i] = 0;
                     strs[i] = "";
                 }
-                
+
                 for (i=0; i< Math.min(3, num_taxonomies); i++) {
                     total_articles += array[i][1];
                 }
@@ -159,6 +167,8 @@ $( document ).ready(function() {
                 $("#topic1-bar").css("width",String(lengths[0])+"%");
                 $("#topic2-bar").css("width",String(lengths[1])+"%");
                 $("#topic3-bar").css("width",String(lengths[2])+"%");
+                
+                $("#stacked-bar").tooltip("disable");
                 $("#topic1-bar").attr('title', String(array[0][1]) + " " + array[0][0] + strs[0]).tooltip('fixTitle');
                 if (num_taxonomies > 1) {
                     $("#topic2-bar").attr('title', String(array[1][1]) + " " + array[1][0] + strs[1]).tooltip('fixTitle');
@@ -166,13 +176,16 @@ $( document ).ready(function() {
                 if (num_taxonomies > 2) {
                     $("#topic3-bar").attr('title', String(array[2][1]) + " " + array[2][0] + strs[2]).tooltip('fixTitle');
                 }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                display_error_message();
             }
 
         });
-        
+
         author = undefined;
         taxonomy = undefined;
-        
+
         // $.getJSON("testjsons/profile.json", function(json) {
         //     console.log(json);
         //     var author_obj = 100 - (Math.abs(parseFloat(json.bias)) * 200.0);
@@ -226,8 +239,8 @@ $( document ).ready(function() {
     // takes a percentage value and the id of the html element and updates
     // the appearance of the bar
     function generate_bar(value, id) {
-        if (value > 100) {
-            value = 100;
+        if (value < 0) {
+            value = 0;
         }
         if (value > 70) {
             $(id).addClass("progress-bar-success");
@@ -242,4 +255,10 @@ $( document ).ready(function() {
         $(id).css("width",str+"%");
         return str
     };
+    
+    function display_error_message() {
+        $("#obj-hover").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
+        $("#openness-hover").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
+        $("#stacked-bar").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
+    }
 });
