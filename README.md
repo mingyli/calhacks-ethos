@@ -1,5 +1,6 @@
 
-![Picture](https://files.catbox.moe/koeqts.png = 50x)
+![Picture](https://files.catbox.moe/e05xsj.png)
+
 # Calhacks Project 2016
 
 # Contributors
