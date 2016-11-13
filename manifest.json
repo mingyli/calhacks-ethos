@@ -10,11 +10,12 @@
     "default_popup": "popup.html"
   },
   "content_scripts": [ {
-    "js": [ "jquery-3.1.1.min.js", "bootstrap.min.js", "article-detection.js", "lib/diffbot.js"],
+    "js": [ "jquery-3.1.1.min.js", "bootstrap.min.js", "article-detection.js", "lib/diffbot.js", "twitter.js"],
     "matches": [ "http://*/*", "https://*/*"]
   }],
   "permissions": [
     "activeTab",
     "https://ajax.googleapis.com/"
   ]
+  "content_security_policy": "script-src 'self' http://api.diffbot.com/v3/; object-src 'self'"
 }
