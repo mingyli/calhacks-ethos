@@ -16,16 +16,7 @@ $( document ).ready(function() {
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
         console.log(tabs[0].url);
         $('[data-toggle="tooltip"]').tooltip();
-        
-        detectArticle(tabs[0].url, function(article){
-            if(article) {
-                make_author_request(tabs[0].url);
-                make_sentiment_request(tabs[0].url);
-                make_taxonomy_request(tabs[0].url);
-            }else{
-              console.log("popup says not an article");
-            }
-        });
+        make_author_request(tabs[0].url);
     });
 
     function make_author_request(tab_url){
@@ -35,13 +26,26 @@ $( document ).ready(function() {
             data:{
                 outputMode: "json",
                 url: tab_url,
-
             },
             cache: false,
             success: function(data){
                 console.log(data)
-                author = data.authors.names[0]
+                author = data.authors.names[0];
+                
+                if (author == undefined) {
+                    console.log("No author");
+                    $("#header-text").text("No author found");
+                    $("#article-hover").remove();
+                    $("table").remove();
+                    $("#author").remove();
+                    
+                    return;
+                }
+               
+                console.log("It kept going");
                 $("#author").text(author + "'s profile:");
+                make_sentiment_request(tab_url);
+                make_taxonomy_request(tab_url);
                 make_profile_request();
             }
         });
@@ -120,7 +124,7 @@ $( document ).ready(function() {
                 data = JSON.parse(data);
                 
                 if (data.status != "OK") {
-                    display_error_message();
+                    display_error_message("could not retrieve other articles by this author");
                     return;
                 }
                 
@@ -186,7 +190,7 @@ $( document ).ready(function() {
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                display_error_message();
+                display_error_message("could not retrieve other articles by this author");
             }
 
         });
@@ -264,9 +268,9 @@ $( document ).ready(function() {
         return str
     };
     
-    function display_error_message() {
-        $("#obj-hover").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
-        $("#openness-hover").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
-        $("#stacked-bar").attr('title', "could not retrieve other articles by this author").tooltip('fixTitle');
+    function display_error_message(error_str) {
+        $("#obj-hover").attr('title', error_str).tooltip('fixTitle');
+        $("#openness-hover").attr('title', error_str).tooltip('fixTitle');
+        $("#stacked-bar").attr('title', error_str).tooltip('fixTitle');
     }
 });
