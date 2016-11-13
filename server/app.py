@@ -1,7 +1,7 @@
 import os
 import json
 from flask import Flask
-from Author import Author
+from flask_sqlalchemy import SQLAlchemy
 from watson_developer_cloud import AlchemyDataNewsV1
 from watson_developer_cloud import AlchemyLanguageV1
 from watson_developer_cloud import PersonalityInsightsV3
@@ -12,12 +12,18 @@ API_KEY = os.environ['IBM_WATSON_API_KEY']
 API_USERNAME = os.environ['IBM_SERVICE_USERNAME']
 API_PASSWORD = os.environ['IBM_SERVICE_PASSWORD']
 DEVELOPMENT = (os.environ['FLASK_ENVIRONMENT'] == 'development')
+DATABASE_URL = os.environ['DATABASE_URL']
+NEWS_DATE_RANGE = os.environ['NEWS_DATE_RANGE'] if ('NEWS_DATE_RANGE' in os.environ) else 'now-10d' 
+NEWS_MAX_RESULTS = os.environ['NEWS_MAX_RESULTS'] if ('NEWS_MAX_RESULTS' in os.environ) else 10
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+db = SQLAlchemy(app)
 
-@app.route("/author/<author>/taxonomy/<taxonomy>")
-def main(author, taxonomy):
-    return json.dumps(rate(author, taxonomy))
+from Author import Author
+@app.route("/author/<author_name>/taxonomy/<taxonomy>")
+def api(author_name, taxonomy):
+    return json.dumps(rate(author_name, taxonomy))
 
 alchemy_language = AlchemyLanguageV1(api_key=API_KEY)
 alchemy_data_news = AlchemyDataNewsV1(api_key=API_KEY)
@@ -28,22 +34,18 @@ personality_insights = PersonalityInsightsV3(
 
 sample_author = Author("John Doe")
 
-def rate(author, taxonomy):
-    if DEVELOPMENT:
-        author = sample_author
-        print(author)
-    else:
-        update_author(author)
-
+def rate(author_name, taxonomy):
+    author = get_author_by_name(author_name)
     if taxonomy in author.taxonomies:
         familiarity = author.taxonomies[taxonomy] / sum(author.taxonomies.values())
     else:
         familiarity = 0
-
-    for trait in author.personality['values']:
-        if trait['trait_id'] != "value_openness_to_change": continue
-        author.openness = trait['percentile']
-        break
+    
+    if 'values' in author.personality:
+        for trait in author.personality['values']:
+            if trait['trait_id'] != "value_openness_to_change": continue
+            author.openness = trait['percentile']
+            break
 
     author.familiarity = familiarity
     result = {
@@ -56,12 +58,13 @@ def rate(author, taxonomy):
     return result
 
 def update_author(author):
-    start_range = 'now-3d'
+    print(author.name, "to be updated,")
+    start_range = 'now-5d' if DEVELOPMENT else NEWS_DATE_RANGE
     try:
         articles = alchemy_data_news.get_news_documents(
                 start=start_range,
                 end="now",
-                max_results=1,
+                max_results= (3 if DEVELOPMENT else NEWS_MAX_RESULTS),
                 query_fields={
                     'enriched.url.author': author.name
                     }, 
@@ -83,10 +86,11 @@ def update_author(author):
         except WatsonException as e:
             print(e)
         text_data.append(text)
-
+    
     update_objectivity_of(author, emotion_data)
     update_personality_of(author, text_data)
     update_taxonomy_of(author, articles)
+    print(author.name, "updated.")
     return author
 
 def update_objectivity_of(author, data):
@@ -101,7 +105,10 @@ def update_objectivity_of(author, data):
 def update_personality_of(author, data):
     full_text = ""
     for text in data: full_text += text['text'] + " "
-    personality = personality_insights.profile(full_text.encode('utf-8')) 
+    try:
+        personality = personality_insights.profile(full_text.encode('utf-8'))
+    except WatsonException as e:
+        print(e)
     author.personality = personality
     print(personality)
     return personality
@@ -121,17 +128,58 @@ def update_taxonomy_of(author, articles):
     print(taxonomies)
     return taxonomies
 
-def get_author(author):
-    return sample_author
-
+def get_author_by_name(name):
+    cache = CachedAuthor.query.filter_by(name=name).first()
+    if not cache:
+        author = Author(name)
+        update_author(author)
+        cached_author = CachedAuthor.fromAuthor(author)
+        db.session.add(cached_author)
+        db.session.commit()
+    else:
+        author = Author.fromCache(cache)
+        if not author.objectivity: update_author(author)
+    return author
+    
 def build_sample_author():
     global sample_author
     sample_name = "Michael D. Shear"
     sample_author = Author(sample_name)
     sample_author.build_sample_data()
-    #update_author(sample_author)
     return sample_author
+
+## DB Classes
+
+class CachedAuthor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128))
+    objectivity = db.Column(db.Float)
+    openness = db.Column(db.Float)
+    personality = db.Column(db.Text)
+    taxonomies = db.Column(db.Text)
+    
+    def __init__(self, name, objectivity=None, openness=None, personality = (), taxonomies = ()):
+        self.name = name
+        self.objectivity = objectivity
+        self.openness = openness
+        self.personality = json.dumps(personality)
+        self.taxonomies = json.dumps(taxonomies)
+    
+    def __repr__(self):
+        return "<CachedAuthor {}\n objectivity:{}\npersonality:{}\n,openness:{}\ntaxonomies:{}>".format(self.name, self.objectivity, self.personality, self.openness, self.taxonomies)
+
+    @classmethod
+    def fromAuthor(cls, author):
+        return cls( author.name, \
+                    author.objectivity, \
+                    author.openness, \
+                    author.personality, \
+                    author.taxonomies \
+                    )
+
+## Flask Main
 
 if __name__ == "__main__":
     build_sample_author()
+    db.create_all()
     app.run(host='0.0.0.0', port=PORT)
