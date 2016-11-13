@@ -10,10 +10,7 @@
     "default_popup": "popup.html"
   },
   "content_scripts": [ {
-<<<<<<< HEAD
     "js": [ "jquery-3.1.1.min.js", "bootstrap.min.js", "article-detection.js", "facebook-scraper.js"],
-=======
->>>>>>> 05d67ce0f2d537410f34090c5c435fb5ca9c4c87
     "matches": [ "http://*/*", "https://*/*"]
   }],
   "permissions": [
