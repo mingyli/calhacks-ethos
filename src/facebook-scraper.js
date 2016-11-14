@@ -29,7 +29,7 @@ function isOutsideURL(url){
 function addRating(stories, links){
     for(var i = 0; i < stories.length; i++){
         if($(stories[i]).find('.article-rating').length > 0) continue;
-        var ratingBar = "<div id = 'rating-bar-" + ratings + "' class = 'article-rating' style='width:100%;height:2em;box-shadow: 0px 2px 5px rgba(0,0,0,0.5);font-size:1.2em;z-index:1000;text-align:center;position:relative;padding:0.5em;color:white;box-sizing:border-box;opacity:0.9;'><span style='color:black'>Analysing article...</span></div>";
+        var ratingBar = "<div id = 'rating-bar-" + ratings + "' class = 'article-rating' style='width:100%;height:2em;box-shadow: 0px 2px 5px rgba(0,0,0,0.5);font-size:1.2em;z-index:1000;text-align:center;position:relative;padding:0.5em;color:white;box-sizing:border-box;opacity:0.9;'><span style='color:black'>Analyzing article...</span></div>";
 
         $(stories[i]).children().first().after(ratingBar);
         urlRatingMap[links[i]] = ratings;
@@ -53,7 +53,7 @@ function addRating(stories, links){
                 $(ratingBarId).text("Objectivity - " + articleObj);
                 $(ratingBarId).attr('style', currentStyle + 'background-color:' + color + ';');
               }else{
-                $(ratingBarId).text("Could not analyse article");
+                $(ratingBarId).text("Could not analyze article");
                 $(ratingBarId).attr('style', currentStyle + 'color:black;');
               }
             }
