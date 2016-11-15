@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Ethos",
-  "description": "This extension reports bias in news articles, generates profiles of authors and tags Facebook articles with their objectivity scores.",
+  "description": "This Chrome extension reports bias in news articles, generates profiles of authors and tags Facebook articles with their objectivity scores.",
   "version": "1.0",
 
   "browser_action": {
