@@ -17,5 +17,5 @@
     "activeTab",
     "https://ajax.googleapis.com/"
   ],
-  "content_security_policy": "script-src 'self' http://api.diffbot.com/v3/; object-src 'self'"
+  "content_security_policy": "script-src 'self' https://api.diffbot.com/v3/; object-src 'self'"
 }
