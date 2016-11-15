@@ -12,6 +12,9 @@
 | Matthew Soh | msohcw |
 | William Song | song-william |
 
+## Install instructions
+Either open Ethos.crx with Google Chrome, or enable Developer Mode in the Extensions page and select Load Unpacked Extension, then point to ./src/
+
 ## Project Structure
 * src - unpacked Chrome extension
 * server - Flask server files
